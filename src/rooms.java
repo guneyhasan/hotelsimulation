@@ -8,4 +8,6 @@ public class rooms {
     public boolean balcony[]=new boolean[100];
 
     public int price[]=new int[100];
+
+    public boolean isReserved[]=new boolean[100];
 }

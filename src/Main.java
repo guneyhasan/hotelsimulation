@@ -7,11 +7,14 @@ public class Main {
     static int employeeNumber=0;
     static int roomNumber=0;
     static int customerNumber=0;
+    static int reservationNumber=0;
     static Employee b= new Employee();
     static rooms c = new rooms();
     static Customer d= new Customer();
+    static Reservation e= new Reservation();
     static String input;
     static String[] splittedCommands;
+
     static void addRoom(String[] a,int i)
     {
         //c is class of rooms
@@ -20,6 +23,7 @@ public class Main {
         c.aircondition[i]=Boolean.valueOf(a[3]);
         c.balcony[i]=Boolean.valueOf(a[4]);
         c.price[i]=Integer.valueOf(a[5]);
+        c.isReserved[i]=false;
 
         roomNumber++;
 
@@ -54,6 +58,20 @@ public class Main {
         d.phone[i]=a[8];
 
         customerNumber++;
+    }
+
+    static void addReservation(String[] a,int i){
+        //c is class of rooms
+        if(c.isReserved[Integer.valueOf(a[2])-1]==false){
+            c.isReserved[Integer.valueOf(a[2])-1]=true;
+            //e is class of reservations
+            e.customerId[i]=Integer.valueOf(a[1])-1;
+            e.roomId[i]=Integer.valueOf(a[2])-1;
+            e.startDate[i]=a[3];
+            e.endDate[i]=a[4];
+
+            reservationNumber++;
+        }
     }
 
     static void listRooms(){
@@ -123,8 +141,23 @@ public class Main {
         }
     }
 
+    static void listReservations(){
+        for(int i =0;i<e.roomId.length;i++){
+            if(c.isReserved[i]==true){
+                System.out.print("  Room #");
+                System.out.print((e.roomId[i]+1)+" ");
+                // d is class of customers
+                System.out.print(d.name[e.customerId[i]]+" "+ d.surname[e.customerId[i]]+" ");
+                System.out.print( e.startDate[i]+" ");
+                System.out.print( e.endDate[i]+" ");
+                System.out.println(" ");
+            }
+        }
+    }
+
     static void searchCustomer(String a){
-        if(a.endsWith("*")  || a.endsWith("?")){
+        char[] check=a.toCharArray();
+        if(a.endsWith("*") && check[check.length-2]!='*'  || a.endsWith("?") && check[check.length-2]!='?'){
 
             if(a.endsWith("*")){
                 a=a.substring(0,a.indexOf('*'));
@@ -153,6 +186,7 @@ public class Main {
             }
         }
     }
+
     //splitting commands.txt and adding them to the array
     public static void main(String[] args) throws IOException
     {
@@ -188,6 +222,15 @@ public class Main {
                 System.out.println(input);
                 addCustomer(splittedCommands,customerNumber);
             }
+
+            else if(splittedCommands[0].equals("addReservation")){
+                //this if for visual improvements
+                if(reservationNumber==0){
+                    System.out.println(" ");
+                }
+                System.out.println(input);
+                addReservation(splittedCommands,reservationNumber);
+            }
             else if(splittedCommands[0].equals("listEmployees")){
                 System.out.println("");
                 System.out.println(input);
@@ -206,13 +249,17 @@ public class Main {
                 listCustomers();
             }
 
+            else if(splittedCommands[0].equals("listReservations")){
+                System.out.println("");
+                System.out.println(input);
+                listReservations();
+            }
+
             else if(splittedCommands[0].equals("searchCustomer")){
                 System.out.println("");
                 System.out.println(input);
                 searchCustomer(splittedCommands[1].toString());
             }
-
-
         }
 
         commands.close();
