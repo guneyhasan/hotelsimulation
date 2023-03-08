@@ -1,6 +1,4 @@
 import java.io.*;
-import java.util.Arrays;
-import java.util.Scanner;
 
 public class Main {
 
@@ -8,67 +6,79 @@ public class Main {
     static int roomNumber=0;
     static int customerNumber=0;
     static int reservationNumber=0;
-    static Employee b= new Employee();
-    static rooms c = new rooms();
-    static Customer d= new Customer();
-    static Reservation e= new Reservation();
+    static Hotel hotel= new Hotel();
+
     static String input;
     static String[] splittedCommands;
 
     static void addRoom(String[] a,int i)
     {
-        //c is class of rooms
-        c.numberOfRooms[i]=Integer.valueOf(a[1]);
-        c.type[i]=a[2];
-        c.aircondition[i]=Boolean.valueOf(a[3]);
-        c.balcony[i]=Boolean.valueOf(a[4]);
-        c.price[i]=Integer.valueOf(a[5]);
-        c.isReserved[i]=false;
+        for(int j=0;j<Integer.valueOf(a[1]);j++){
+            Room c = new Room();
+            //c is class of rooms
+            c.type=a[2];
+            c.aircondition=Boolean.valueOf(a[3]);
+            c.balcony=Boolean.valueOf(a[4]);
+            c.price=Integer.valueOf(a[5]);
+            c.isReserved=false;
 
-        roomNumber++;
+            hotel.Rooms[i]=c;
+            i++;
+            roomNumber++;
+        }
 
     }
     static void addEmployee(String[] a,int i)
     {
+        Employee b= new Employee();
         //b is class of employees
-        b.name[i]=a[1];
-        b.surname[i]=a[2];
-        b.gender[i]=a[3];
-        b.birthday[i]=a[4];
-        b.adresstext[i]=a[5];
-        b.district[i]=a[6];
-        b.city[i]=a[7];
-        b.phone[i]=a[8];
-        b.job[i]=a[9];
-        b.salary[i]=Integer.valueOf(a[10]);
+        b.name=a[1];
+        b.surname=a[2];
+        b.gender=a[3];
+        b.birthday=a[4];
+        b.adresstext=a[5];
+        b.district=a[6];
+        b.city=a[7];
+        b.phone=a[8];
+        b.job=a[9];
+        b.salary=Integer.valueOf(a[10]);
 
+        hotel.Employees[i]=b;
         employeeNumber++;
 
     }
 
     static void addCustomer(String[] a,int i){
+        Customer d= new Customer();
         //d is class of customers
-        d.name[i]=a[1];
-        d.surname[i]=a[2];
-        d.gender[i]=a[3];
-        d.birthday[i]=a[4];
-        d.adresstext[i]=a[5];
-        d.district[i]=a[6];
-        d.city[i]=a[7];
-        d.phone[i]=a[8];
+        d.name=a[1];
+        d.surname=a[2];
+        d.gender=a[3];
+        d.birthday=a[4];
+        d.adresstext=a[5];
+        d.district=a[6];
+        d.city=a[7];
+        d.phone=a[8];
+
+        hotel.Customers[i]=d;
 
         customerNumber++;
     }
 
     static void addReservation(String[] a,int i){
         //c is class of rooms
-        if(c.isReserved[Integer.valueOf(a[2])-1]==false){
-            c.isReserved[Integer.valueOf(a[2])-1]=true;
+        if(hotel.Rooms[Integer.valueOf(a[2])-1]!=null && hotel.Rooms[Integer.valueOf(a[2])-1].isReserved==false)
+        {
+            hotel.Rooms[Integer.valueOf(a[2])-1].isReserved=true;
+
+            Reservation e= new Reservation();
             //e is class of reservations
-            e.customerId[i]=Integer.valueOf(a[1])-1;
-            e.roomId[i]=Integer.valueOf(a[2])-1;
-            e.startDate[i]=a[3];
-            e.endDate[i]=a[4];
+            e.customerId=Integer.valueOf(a[1])-1;
+            e.roomId=Integer.valueOf(a[2])-1;
+            e.startDate=a[3];
+            e.endDate=a[4];
+
+            hotel.Reservations[i]=e;
 
             reservationNumber++;
         }
@@ -77,24 +87,23 @@ public class Main {
     static void listRooms(){
         System.out.println(" ");
         //c is class of rooms
-        for(int i=0;i<c.price.length;i++){
-            if(c.type[i]!=null){
+        for(int i=0;i<hotel.Rooms.length;i++){
+            if(hotel.Rooms[i]!=null){
                 System.out.print("  Room #"+(i+1)+" ");
-                System.out.print(c.numberOfRooms[i]+" ");
-                System.out.print(c.type[i]+" ");
-                if(c.aircondition[i]==true){
+                System.out.print(hotel.Rooms[i].type+" ");
+                if(hotel.Rooms[i].aircondition==true){
                     System.out.print("aircondition ");
                 }
                 else {
                     System.out.print("no-aircondition ");
                 }
-                if(c.balcony[i]==true){
+                if(hotel.Rooms[i].balcony==true){
                     System.out.print("balcony ");
                 }
                 else{
                     System.out.print("no-balcony ");
                 }
-                System.out.print( c.price[i]+" ");
+                System.out.print( hotel.Rooms[i].price+" ");
                 System.out.println(" ");
             }
         }
@@ -103,19 +112,20 @@ public class Main {
     static void listEmployees(){
         System.out.println(" ");
         //b is class of employees
-        for(int i=0;i<b.name.length;i++){
-            if(b.name[i]!=null){
+        for(int i=0;i<hotel.Employees.length;i++){
+            if(hotel.Employees[i]!=null)
+            {
                 System.out.print("  Employee #"+(i+1)+" ");
-                System.out.print(b.name[i]+" ");
-                System.out.print(b.surname[i]+" ");
-                System.out.print(b.gender[i]+" ");
-                System.out.print(b.birthday[i]+" ");
-                System.out.print(b.adresstext[i]+" ");
-                System.out.print(b.district[i]+" ");
-                System.out.print(b.city[i]+" ");
-                System.out.print(b.phone[i]+" ");
-                System.out.print(b.job[i]+" ");
-                System.out.print(b.salary[i]+" ");
+                System.out.print(hotel.Employees[i].name+" ");
+                System.out.print(hotel.Employees[i].surname+" ");
+                System.out.print(hotel.Employees[i].gender+" ");
+                System.out.print(hotel.Employees[i].birthday+" ");
+                System.out.print(hotel.Employees[i].adresstext+" ");
+                System.out.print(hotel.Employees[i].district+" ");
+                System.out.print(hotel.Employees[i].city+" ");
+                System.out.print(hotel.Employees[i].phone+" ");
+                System.out.print(hotel.Employees[i].job+" ");
+                System.out.print(hotel.Employees[i].salary+" ");
                 System.out.println("");
             }
         }
@@ -125,36 +135,37 @@ public class Main {
     static void listCustomers(){
         System.out.println(" ");
         //d is class of customers
-        for(int i=0;i<d.name.length;i++){
-            if(d.name[i]!=null){
+        for(int i=0;i<hotel.Customers.length;i++){
+            if(hotel.Customers[i]!=null){
                 System.out.print("  Customers #"+(i+1)+" ");
-                System.out.print(d.name[i]+" ");
-                System.out.print(d.surname[i]+" ");
-                System.out.print(d.gender[i]+" ");
-                System.out.print(d.birthday[i]+" ");
-                System.out.print(d.adresstext[i]+" ");
-                System.out.print(d.district[i]+" ");
-                System.out.print(d.city[i]+" ");
-                System.out.print(d.phone[i]+" ");
+                System.out.print(hotel.Customers[i].name+" ");
+                System.out.print(hotel.Customers[i].surname+" ");
+                System.out.print(hotel.Customers[i].gender+" ");
+                System.out.print(hotel.Customers[i].birthday+" ");
+                System.out.print(hotel.Customers[i].adresstext+" ");
+                System.out.print(hotel.Customers[i].district+" ");
+                System.out.print(hotel.Customers[i].city+" ");
+                System.out.print(hotel.Customers[i].phone+" ");
                 System.out.println("");
             }
         }
     }
 
     static void listReservations(){
-        for(int i =0;i<e.roomId.length;i++){
-            if(c.isReserved[i]==true){
+        for(int i =0;i<hotel.Reservations.length;i++){
+            if(hotel.Reservations[i]!=null){
                 System.out.print("  Room #");
-                System.out.print((e.roomId[i]+1)+" ");
+                System.out.print((hotel.Reservations[i].roomId+1)+" ");
                 // d is class of customers
-                System.out.print(d.name[e.customerId[i]]+" "+ d.surname[e.customerId[i]]+" ");
-                System.out.print( e.startDate[i]+" ");
-                System.out.print( e.endDate[i]+" ");
+                System.out.print(hotel.Customers[hotel.Reservations[i].customerId].name+" "+hotel.Customers[hotel.Reservations[i].customerId].surname+" ");
+                System.out.print( hotel.Reservations[i].startDate+" ");
+                System.out.print( hotel.Reservations[i].endDate+" ");
                 System.out.println(" ");
             }
         }
     }
 
+    /*
     static void searchCustomer(String a){
         char[] check=a.toCharArray();
         if(a.endsWith("*") && check[check.length-2]!='*'  || a.endsWith("?") && check[check.length-2]!='?'){
@@ -186,7 +197,7 @@ public class Main {
             }
         }
     }
-
+    */
     //splitting commands.txt and adding them to the array
     public static void main(String[] args) throws IOException
     {
@@ -258,7 +269,7 @@ public class Main {
             else if(splittedCommands[0].equals("searchCustomer")){
                 System.out.println("");
                 System.out.println(input);
-                searchCustomer(splittedCommands[1].toString());
+                //searchCustomer(splittedCommands[1].toString());
             }
         }
 
